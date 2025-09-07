@@ -1,7 +1,18 @@
 <?php
-// ==================== ШИФР ХИЛЛА ====================
+// __________________ ШИФР ХИЛЛА __________________
 
-function hillEncrypt($text, $keyMatrix) {
+
+/*
+    Принцип => Текст разбивается на блоки, которые умножаются на матрицу ключа.
+    Требования {
+        Длина текста должна быть кратна размеру матрицы;
+        Матрица ключа должна быть обратима по модулю (mod) 26;
+        Формула шифрования => C = K * P mod 26;
+        Формула декодирования (расшифровки) => P = K^{-1} * C mod 26.
+    }
+*/
+
+function HillEncrypt($text, $keyMatrix) {
     $n = count($keyMatrix);
     $text = strtoupper(preg_replace('/[^A-Za-z]/', '', $text));
     
@@ -17,8 +28,7 @@ function hillEncrypt($text, $keyMatrix) {
         $vector = array_map(fn($char) => ord($char) - 65, str_split($block));
         $resultVector = array_fill(0, $n, 0);
         
-        // Умножение матрицы на вектор
-        for ($row = 0; $row < $n; $row++) {
+        for ($row = 0; $row < $n; $row++) { // Умнажаем матрицу на вектор
             for ($col = 0; $col < $n; $col++) {
                 $resultVector[$row] += $keyMatrix[$row][$col] * $vector[$col];
             }
@@ -30,14 +40,14 @@ function hillEncrypt($text, $keyMatrix) {
     return $encryptedText;
 }
 
-function hillDecrypt($text, $keyMatrix) {
+function HillDecrypt($text, $keyMatrix) {
     $n = count($keyMatrix);
     $decryptedText = '';
     
     // Находим обратную матрицу по модулю 26
     $det = determinant($keyMatrix);
-    $invDet = modInverse($det, 26);
-    $adjMatrix = adjugate($keyMatrix);
+    $invDet = ModInverse($det, 26);
+    $adjMatrix = Adj($keyMatrix);
     $invMatrix = array_fill(0, $n, array_fill(0, $n, 0));
     
     for ($i = 0; $i < $n; $i++) {
@@ -64,7 +74,7 @@ function hillDecrypt($text, $keyMatrix) {
 }
 
 // Вспомогательные функции для шифра Хилла
-function determinant($matrix) {
+function Determinant($matrix) {
     $n = count($matrix);
     if ($n == 2) {
         return $matrix[0][0] * $matrix[1][1] - $matrix[0][1] * $matrix[1][0];
@@ -84,7 +94,7 @@ function determinant($matrix) {
     return $det;
 }
 
-function modInverse($a, $m) {
+function ModInverse($a, $m) {
     for ($x = 1; $x < $m; $x++) {
         if (($a * $x) % $m == 1) {
             return $x;
@@ -93,7 +103,7 @@ function modInverse($a, $m) {
     return 1;
 }
 
-function adjugate($matrix) {
+function Adj($matrix) {
     $n = count($matrix);
     $adj = array_fill(0, $n, array_fill(0, $n, 0));
     
@@ -115,8 +125,6 @@ function adjugate($matrix) {
     return $adj;
 }
 
-// ==================== ПРИМЕР ИСПОЛЬЗОВАНИЯ ====================
-
 // Исходное сообщение и ключи
 $message = "HELLO";
 $vigenereKey = "KEY";
@@ -129,12 +137,12 @@ $hillKeyMatrix = [
 echo "Исходное сообщение: $message\n\n";
 
 
-$hillEncrypted = hillEncrypt($vigenereEncrypted, $hillKeyMatrix);
+$hillEncrypted = HillEncrypt($vigenereEncrypted, $hillKeyMatrix);
 echo "После шифра Хилла: $hillEncrypted\n\n";
 
 // Расшифрование
-$hillDecrypted = hillDecrypt($hillEncrypted, $hillKeyMatrix);
-echo "После расшифровки Хилла: $hillDecrypted\n";
+$hillDecrypted = HillDecrypt($hillEncrypted, $hillKeyMatrix);
+echo "После декодирования Хилла: $hillDecrypted\n";
 
 
 ?>

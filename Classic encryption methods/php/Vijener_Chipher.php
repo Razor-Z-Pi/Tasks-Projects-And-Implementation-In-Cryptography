@@ -1,9 +1,18 @@
 <?php
 
-// ==================== ШИФР ВИЖЕНЕРА ====================
+// __________________ ШИФР ВИЖЕНЕРА ________________________
 
-function vigenereEncrypt($text, $key) {
-    $text = strtoupper(preg_replace('/[^A-Za-z]/', '', $text)); // Убираем всё, кроме букв
+/* 
+    1. VigenereEncrypt => функция шифрования;
+    2. VigenereDecrypt => функция дешифрования 
+
+    Принцип => Каждая буква сдвигается на значение буквы ключа (A=0, B=1, ..., Z=25).
+    Формула шифрования => C_i = (P_i + K_i) mod 26
+    Формула декодирования (расшифровки) => P_i = (C_i - K_i + 26) mod 26
+*/
+
+function VigenereEncrypt($text, $key) {
+    $text = strtoupper(preg_replace('/[^A-Za-z]/', '', $text));
     $key = strtoupper(preg_replace('/[^A-Za-z]/', '', $key));
     $keyLength = strlen($key);
     $encryptedText = '';
@@ -18,7 +27,7 @@ function vigenereEncrypt($text, $key) {
     return $encryptedText;
 }
 
-function vigenereDecrypt($text, $key) {
+function VigenereDecrypt($text, $key) {
     $key = strtoupper(preg_replace('/[^A-Za-z]/', '', $key));
     $keyLength = strlen($key);
     $decryptedText = '';
@@ -34,10 +43,10 @@ function vigenereDecrypt($text, $key) {
 }
 
 // Шифрование
-$vigenereEncrypted = vigenereEncrypt($message, $vigenereKey);
+$vigenereEncrypted = VigenereEncrypt($message, $vigenereKey);
 echo "После шифра Виженера: $vigenereEncrypted\n";
 
-$vigenereDecrypted = vigenereDecrypt($hillDecrypted, $vigenereKey);
-echo "После расшифровки Виженера: $vigenereDecrypted\n";
+$vigenereDecrypted = VigenereDecrypt($hillDecrypted, $vigenereKey);
+echo "После декодирования Виженера: $vigenereDecrypted\n";
 
 ?>

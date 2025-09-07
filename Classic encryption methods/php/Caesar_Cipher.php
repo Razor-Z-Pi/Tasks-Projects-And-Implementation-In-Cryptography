@@ -1,17 +1,17 @@
 <?php
-function CaesarCipher($text, $shift, $mode = 'encrypt', $alphabet = 'eng') {
+function CaesarCipher($text, $shift, $mode = 'encrypt', $lang = 'eng') {
     $result = '';
-    $shift = $mode === 'decrypt' ? -$shift : $shift;
+    $shift = $mode === 'decrypt' ? - $shift : $shift;
     
     // Определяем алфавит
-    if ($alphabet === 'rus') {
+    if ($lang === 'rus') {
         $lowercase = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
         $uppercase = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ';
-        $alphabetLength = 33;
+        $langLength = 33;
     } else {
         $lowercase = 'abcdefghijklmnopqrstuvwxyz';
         $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $alphabetLength = 26;
+        $langLength = 26;
     }
     
     for ($i = 0; $i < strlen($text); $i++) {
@@ -19,19 +19,19 @@ function CaesarCipher($text, $shift, $mode = 'encrypt', $alphabet = 'eng') {
         
         if (strpos($lowercase . $uppercase, $char) !== false) {
             $isUpper = strpos($uppercase, $char) !== false;
-            $alphabetToUse = $isUpper ? $uppercase : $lowercase;
+            $langToUse = $isUpper ? $uppercase : $lowercase;
             
-            $position = strpos($alphabetToUse, $char);
-            $newPosition = ($position + $shift) % $alphabetLength;
+            $position = strpos($langToUse, $char);
+            $newPosition = ($position + $shift) % $langLength;
             
             // Обработка отрицательных позиций
             if ($newPosition < 0) {
-                $newPosition += $alphabetLength;
+                $newPosition += $langLength;
             }
             
-            $result .= $alphabetToUse[$newPosition];
+            $result .= $langToUse[$newPosition];
         } else {
-            // Не-буквенные символы остаются без изменений
+            // Не буквенные символы остаются без изменений
             $result .= $char;
         }
     }
@@ -39,7 +39,6 @@ function CaesarCipher($text, $shift, $mode = 'encrypt', $alphabet = 'eng') {
     return $result;
 }
 
-// Пример использования
 $text = "Привет, Мир!";
 $shift = 5;
 
