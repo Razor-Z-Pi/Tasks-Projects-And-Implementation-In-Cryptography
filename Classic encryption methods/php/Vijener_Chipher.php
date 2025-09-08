@@ -42,11 +42,14 @@ function VigenereDecrypt($text, $key) {
     return $decryptedText;
 }
 
+$message = "HELLO";
+$vigenereKey = "KEY";
+
 // Шифрование
 $vigenereEncrypted = VigenereEncrypt($message, $vigenereKey);
 echo "После шифра Виженера: $vigenereEncrypted\n";
 
-$vigenereDecrypted = VigenereDecrypt($hillDecrypted, $vigenereKey);
+$vigenereDecrypted = VigenereDecrypt($vigenereEncrypted, $vigenereKey);
 echo "После декодирования Виженера: $vigenereDecrypted\n";
 
 ?>

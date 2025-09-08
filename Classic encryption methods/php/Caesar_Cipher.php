@@ -39,10 +39,10 @@ function CaesarCipher($text, $shift, $mode = 'encrypt', $lang = 'eng') {
     return $result;
 }
 
-$text = "Привет, Мир!";
+$text = "Hello, World!";
 $shift = 5;
 
-$encrypted = CaesarCipher($text, $shift, 'encrypt', 'rus');
+$encrypted = CaesarCipher($text, $shift, 'encrypt', 'eng');
 echo "Зашифрованный: " . $encrypted . "\n";
 
 $decrypted = CaesarCipher($encrypted, $shift, 'decrypt', 'eng');
